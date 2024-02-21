@@ -215,7 +215,7 @@ def run(
     dt = Profile(device=device), Profile(device=device), Profile(device=device)  # profiling times
     loss = torch.zeros(3, device=device)
     jdict, stats, ap, ap_class = [], [], [], []
-    callbacks.run('on_val_start')
+    callbacks.run("on_val_start")
     pbar = tqdm(dataloader, desc=s, mininterval=300.0, bar_format=TQDM_BAR_FORMAT)  # progress bar
     for batch_i, (im, targets, paths, shapes) in enumerate(pbar):
         callbacks.run("on_val_batch_start")
