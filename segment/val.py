@@ -271,7 +271,7 @@ def run(
     loss = torch.zeros(4, device=device)
     jdict, stats = [], []
     # callbacks.run('on_val_start')
-    pbar = tqdm(dataloader, mininterval=30.0, desc=s, bar_format=TQDM_BAR_FORMAT)  # progress bar
+    pbar = tqdm(dataloader, mininterval=300.0, desc=s, bar_format=TQDM_BAR_FORMAT)  # progress bar
     for batch_i, (im, targets, paths, shapes, masks) in enumerate(pbar):
         # callbacks.run('on_val_batch_start')
         with dt[0]:

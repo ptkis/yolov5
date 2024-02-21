@@ -209,7 +209,7 @@ def train(opt, device):
             trainloader.sampler.set_epoch(epoch)
         pbar = enumerate(trainloader)
         if RANK in {-1, 0}:
-            pbar = tqdm(enumerate(trainloader), mininterval=30.0, total=len(trainloader), bar_format=TQDM_BAR_FORMAT)
+            pbar = tqdm(enumerate(trainloader), mininterval=300.0, total=len(trainloader), bar_format=TQDM_BAR_FORMAT)
         for i, (images, labels) in pbar:  # progress bar
             images, labels = images.to(device, non_blocking=True), labels.to(device)
 

@@ -155,7 +155,7 @@ def kmean_anchors(dataset="./data/coco128.yaml", n=9, img_size=640, thr=4.0, gen
 
     # Evolve
     f, sh, mp, s = anchor_fitness(k), k.shape, 0.9, 0.1  # fitness, generations, mutation prob, sigma
-    pbar = tqdm(range(gen), mininterval=30.0, bar_format=TQDM_BAR_FORMAT)  # progress bar
+    pbar = tqdm(range(gen), mininterval=300.0, bar_format=TQDM_BAR_FORMAT)  # progress bar
     for _ in pbar:
         v = np.ones(sh)
         while (v == 1).all():  # mutate until a change occurs (prevent duplicates)
