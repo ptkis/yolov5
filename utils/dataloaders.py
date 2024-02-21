@@ -562,7 +562,9 @@ class LoadImagesAndLabels(Dataset):
         nf, nm, ne, nc, n = cache.pop("results")  # found, missing, empty, corrupt, total
         if exists and LOCAL_RANK in {-1, 0}:
             d = f"Scanning {cache_path}... {nf} images, {nm + ne} backgrounds, {nc} corrupt"
-            tqdm(None, mininterval=30.0, desc=prefix + d, total=n, initial=n, bar_format=TQDM_BAR_FORMAT)  # display cache results
+            tqdm(
+                None, mininterval=30.0, desc=prefix + d, total=n, initial=n, bar_format=TQDM_BAR_FORMAT
+            )  # display cache results
             if cache["msgs"]:
                 LOGGER.info("\n".join(cache["msgs"]))  # display warnings
         assert nf > 0 or not augment, f"{prefix}No labels found in {cache_path}, can not start training. {HELP_URL}"
@@ -646,7 +648,9 @@ class LoadImagesAndLabels(Dataset):
             self.im_hw0, self.im_hw = [None] * n, [None] * n
             fcn = self.cache_images_to_disk if cache_images == "disk" else self.load_image
             results = ThreadPool(NUM_THREADS).imap(lambda i: (i, fcn(i)), self.indices)
-            pbar = tqdm(results, total=len(self.indices), mininterval=30.0, bar_format=TQDM_BAR_FORMAT, disable=LOCAL_RANK > 0)
+            pbar = tqdm(
+                results, total=len(self.indices), mininterval=30.0, bar_format=TQDM_BAR_FORMAT, disable=LOCAL_RANK > 0
+            )
             for i, x in pbar:
                 if cache_images == "disk":
                     b += self.npy_files[i].stat().st_size
@@ -684,7 +688,7 @@ class LoadImagesAndLabels(Dataset):
             pbar = tqdm(
                 pool.imap(verify_image_label, zip(self.im_files, self.label_files, repeat(prefix))),
                 desc=desc,
-                        mininterval=30.0,
+                mininterval=30.0,
                 total=len(self.im_files),
                 bar_format=TQDM_BAR_FORMAT,
             )
@@ -1242,7 +1246,12 @@ class HUBDatasetStats:
                 continue
             dataset = LoadImagesAndLabels(self.data[split])  # load dataset
             desc = f"{split} images"
-            for _ in tqdm(ThreadPool(NUM_THREADS).imap(self._hub_ops, dataset.im_files), total=dataset.n, mininterval=30.0, desc=desc):
+            for _ in tqdm(
+                ThreadPool(NUM_THREADS).imap(self._hub_ops, dataset.im_files),
+                total=dataset.n,
+                mininterval=30.0,
+                desc=desc,
+            ):
                 pass
         print(f"Done. All images saved to {self.im_dir}")
         return self.im_dir
