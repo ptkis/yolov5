@@ -1,4 +1,4 @@
-# YOLOv5 🚀 by Ultralytics, AGPL-3.0 license
+# Ultralytics YOLOv5 🚀, AGPL-3.0 license
 """
 Train a YOLOv5 segment model on a segment dataset Models and datasets download automatically from the latest YOLOv5
 release.
@@ -95,7 +95,12 @@ WORLD_SIZE = int(os.getenv("WORLD_SIZE", 1))
 GIT_INFO = check_git_info()
 
 
-def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictionary
+def train(hyp, opt, device, callbacks):
+    """
+    Trains the YOLOv5 model on a dataset, managing hyperparameters, model optimization, logging, and validation.
+
+    `hyp` is path/to/hyp.yaml or hyp dictionary.
+    """
     (
         save_dir,
         epochs,
@@ -209,7 +214,11 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
     if opt.cos_lr:
         lf = one_cycle(1, hyp["lrf"], epochs)  # cosine 1->hyp['lrf']
     else:
-        lf = lambda x: (1 - x / epochs) * (1.0 - hyp["lrf"]) + hyp["lrf"]  # linear
+
+        def lf(x):
+            """Linear learning rate scheduler decreasing from 1 to hyp['lrf'] over 'epochs'."""
+            return (1 - x / epochs) * (1.0 - hyp["lrf"]) + hyp["lrf"]  # linear
+
     scheduler = lr_scheduler.LambdaLR(optimizer, lr_lambda=lf)  # plot_lr_scheduler(optimizer, scheduler, epochs)
 
     # EMA
@@ -533,6 +542,11 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
 
 
 def parse_opt(known=False):
+    """
+    Parses command line arguments for training configurations, returning parsed arguments.
+
+    Supports both known and unknown args.
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("--weights", type=str, default=ROOT / "yolov5s-seg.pt", help="initial weights path")
     parser.add_argument("--cfg", type=str, default="", help="model.yaml path")
@@ -577,7 +591,7 @@ def parse_opt(known=False):
 
 
 def main(opt, callbacks=Callbacks()):
-    # Checks
+    """Initializes training or evolution of YOLOv5 models based on provided configuration and options."""
     if RANK in {-1, 0}:
         print_args(vars(opt))
         check_git_status()
@@ -734,7 +748,11 @@ def main(opt, callbacks=Callbacks()):
 
 
 def run(**kwargs):
-    # Usage: import train; train.run(data='coco128.yaml', imgsz=320, weights='yolov5m.pt')
+    """
+    Executes YOLOv5 training with given parameters, altering options programmatically; returns updated options.
+
+    Example: import train; train.run(data='coco128.yaml', imgsz=320, weights='yolov5m.pt')
+    """
     opt = parse_opt(True)
     for k, v in kwargs.items():
         setattr(opt, k, v)

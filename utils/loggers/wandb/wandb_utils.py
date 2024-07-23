@@ -1,4 +1,4 @@
-# YOLOv5 🚀 by Ultralytics, AGPL-3.0 license
+# Ultralytics YOLOv5 🚀, AGPL-3.0 license
 
 # WARNING ⚠️ wandb is deprecated and will be removed in future release.
 # See supported integrations at https://github.com/ultralytics/yolov5#integrations
@@ -152,6 +152,7 @@ class WandbLogger:
         LOGGER.info(f"Saving model artifact on epoch {epoch + 1}")
 
     def val_one_image(self, pred, predn, path, names, im):
+        """Evaluates model prediction for a single image, returning metrics and visualizations."""
         pass
 
     def log(self, log_dict):

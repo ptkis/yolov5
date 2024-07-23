@@ -1,4 +1,4 @@
-# YOLOv5 🚀 by Ultralytics, AGPL-3.0 license
+# Ultralytics YOLOv5 🚀, AGPL-3.0 license
 """Image augmentation functions."""
 
 import math
@@ -12,7 +12,11 @@ from ..general import resample_segments, segment2box
 
 
 def mixup(im, labels, segments, im2, labels2, segments2):
-    # Applies MixUp augmentation https://arxiv.org/pdf/1710.09412.pdf
+    """
+    Applies MixUp augmentation blending two images, labels, and segments with a random ratio.
+
+    See https://arxiv.org/pdf/1710.09412.pdf
+    """
     r = np.random.beta(32.0, 32.0)  # mixup ratio, alpha=beta=32.0
     im = (im * r + im2 * (1 - r)).astype(np.uint8)
     labels = np.concatenate((labels, labels2), 0)
@@ -26,6 +30,7 @@ def random_perspective(
     # torchvision.transforms.RandomAffine(degrees=(-10, 10), translate=(.1, .1), scale=(.9, 1.1), shear=(-10, 10))
     # targets = [cls, xyxy]
 
+    """Applies random perspective, rotation, scale, shear, and translation augmentations to an image and targets."""
     height = im.shape[0] + border[0] * 2  # shape(h,w,c)
     width = im.shape[1] + border[1] * 2
 
